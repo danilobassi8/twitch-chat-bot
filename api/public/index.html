@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CurcoBOT Panel</title>
+
+    <!-- This is a development version of Vue.js! -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- import stylesheet -->
+    <link rel="stylesheet" href="index.css" />
+
+    <!-- Vue material CDN -->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons" />
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/vue-material/1.0.0-beta-15/theme/default-dark.min.css" />
+
+    <!-- sweetAlert-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.9/sweetalert2.min.css"
+        integrity="sha512-cyIcYOviYhF0bHIhzXWJQ/7xnaBuIIOecYoPZBgJHQKFPo+TOBA+BY1EnTpmM8yKDU4ZdI3UGccNGCEUdfbBqw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.1.9/sweetalert2.all.min.js"
+        integrity="sha512-IZ95TbsPTDl3eT5GwqTJH/14xZ2feLEGJRbII6bRKtE/HC6x3N4cHye7yyikadgAsuiddCY2+6gMntpVHL1gHw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+</head>
+
+<body>
+    <!-- Basic usage -->
+
+    <div id="app">
+        <div class="page-container md-layout-row">
+            <md-app>
+                <md-app-toolbar class="md-primary">
+                    <span class="md-title">Elcurco-BOT</span>
+                </md-app-toolbar>
+
+                <md-app-drawer md-permanent="full" class="toolbar">
+                    <md-toolbar class="md-transparent" md-elevation="0">
+                        Opciones
+                    </md-toolbar>
+
+                    <md-list>
+                        <md-list-item v-for="option in menuOptions" class="menu-option" :key='option.text'>
+                            <span class="md-list-item-text">{{option.text}}</span>
+                        </md-list-item>
+                </md-app-drawer>
+
+                <!-- BODY -->
+                <md-app-content class="content body-content">
+                    <div class="content-right">
+                        <md-button class="md-icon-button md-raised md-primary add-element-btn" v-on:click='addCommand()'>
+                            <md-icon class="text-black">add</md-icon>
+                        </md-button>
+                    </div>
+                    <md-card v-for="(command,idx) in commands" :key='command.name+idx'>
+                        <md-card-header>
+                            <md-card-header-text>
+                                <div class="md-title primary">{{command.name}}</div>
+                                <div class="md-subhead">{{command.value}}</div>
+                            </md-card-header-text>
+
+                            <md-card-actions>
+                                <md-button v-on:click='editCommand(command)'>Editar <md-icon>edit</md-icon>
+                                </md-button>
+                                <md-button v-on:click='deleteCommand(command)'>Borrar <md-icon>delete</md-icon>
+                                </md-button>
+                            </md-card-actions>
+                    </md-card>
+                </md-app-content>
+            </md-app>
+        </div>
+    </div>
+
+    <!-- vue material scripts-->
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://unpkg.com/vue-material"></script>
+
+    <!-- sweetAlert-->
+    <script src="https://unpkg.com/sweetalert2"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>
