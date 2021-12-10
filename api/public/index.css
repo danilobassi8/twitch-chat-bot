@@ -31,3 +31,9 @@
   color: black !important;
   background-color: rgb(0, 255, 0) !important;
 }
+
+.toolbar-header {
+  background-color: var(--md-theme-default-primary, #448aff) !important;
+  display: flex;
+  justify-content: center;
+}
