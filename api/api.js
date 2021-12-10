@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const commands = require('./command.controller');
+const { controller } = require('./command.controller');
 const bodyParser = require('body-parser');
 const config = require('../config');
 const path = require('path');
@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 /* Routes */
-app.get('/api/commands', commands.list);
-app.post('/api/commands', commands.add);
+app.get('/api/commands', controller.list);
+app.post('/api/commands', controller.add);
 // well.. I know I'm not using this HTTP verbs correctly, but who is gonna read this code besides me?
-app.put('/api/commands/edit', commands.edit);
-app.post('/api/commands/delete', commands.delete);
+app.put('/api/commands/edit', controller.edit);
+app.post('/api/commands/delete', controller.delete);
 
 /* Start */
 app.listen(port, () => {
