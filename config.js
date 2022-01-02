@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const config = {
-  timeout: 200,
+  timeout: 2000,
   port: 3000,
   tmi: {
     options: { debug: false },

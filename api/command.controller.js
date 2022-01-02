@@ -1,8 +1,5 @@
-const { JsonDB } = require('node-json-db');
-const { Config } = require('node-json-db/dist/lib/JsonDBConfig');
+const db = require('../database/db');
 const { eventEmitter } = require('../bot/commansUpdater');
-
-const db = new JsonDB(new Config('database/database.json', false, true, '/'));
 
 const controller = {};
 
@@ -10,6 +7,7 @@ controller.list = (req, res) => {
   const commands = db.getData('/commands');
   eventEmitter.emit('updateCommands', commands); // TODO: remove
   res.send({ commands });
+  return commands;
 };
 
 controller.add = (req, res) => {
@@ -18,8 +16,8 @@ controller.add = (req, res) => {
     value: req.body.value,
   });
   db.save();
-  eventEmitter.emit('updateCommands');
   const commands = db.getData('/commands');
+  eventEmitter.emit('updateCommands', commands);
   res.send({ commands });
 };
 controller.edit = (req, res) => {
