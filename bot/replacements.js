@@ -37,7 +37,7 @@ const REGEXS = [
 
 const ALREADY_USED_VARS = {};
 
-const get_prefix = (string) => {
+const getPrefix = (string) => {
   return `COMMAND-${string}-`;
 };
 
@@ -66,6 +66,7 @@ module.exports = async (data) => {
   // TODO: refactor from here to the end. Seems to be working.
   //       but there are some code smells, and code is kind of messy
 
+  // regex logic
   const matchRegex = REGEXS.find((regObj) => regObj.regex.test(key));
   if (matchRegex) {
     const value = PREDEFINED[matchRegex.key];
@@ -78,7 +79,7 @@ module.exports = async (data) => {
   }
 
   const REPLACE = PREDEFINED[key];
-  const alreadyUsedKey = get_prefix(data.metadata.command);
+  const alreadyUsedKey = getPrefix(data.metadata.command);
 
   if (typeof REPLACE === 'function') {
     return REPLACE.call(data);

@@ -75,7 +75,7 @@ bot.parseMessage = async (metadata) => {
     } else {
       const replacement = await replacements({
         key: word,
-        default: splitMessage[index],
+        default: splitMessage[1] ? splitMessage[1] : undefined,
         metadata,
       });
       return replacement;
