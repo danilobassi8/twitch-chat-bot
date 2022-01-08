@@ -22,6 +22,6 @@ app.post('/api/commands/delete', controller.delete);
 /* Start */
 app.listen(port, () => {
   console.log('-----------------------------------------------');
-  console.log(`   API corriendo en http://localhost:${port}`);
+  console.log(`   BOT corriendo en http://localhost:${port}`);
   console.log('-----------------------------------------------');
 });

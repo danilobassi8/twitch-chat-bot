@@ -59,7 +59,7 @@ bot.checkIfMessageIsValid = (message) => {
   return { exists: true, command: matched, regex };
 };
 
-bot.parseMessage = (metadata) => {
+bot.parseMessage = async (metadata) => {
   const command = commandHASH[metadata.command];
 
   let finalMessage = [];
@@ -68,24 +68,22 @@ bot.parseMessage = (metadata) => {
   splitCommand = command.value.split(' ');
   splitMessage = metadata.message.split(' ');
 
-  console.log(']]]]]]]]]]]]]]]]]]]]]]]]');
-  console.log({ splitCommand, splitMessage });
-
-  splitCommand.forEach((word, index) => {
+  const mappedPromisses = await splitCommand.map(async (word, index) => {
     // if not a variable, add the same word as in the msg
     if (!(word.startsWith('$(') && word.endsWith(')'))) {
-      finalMessage.push(word);
+      return word;
     } else {
-      const replacement = replacements({
+      const replacement = await replacements({
         key: word,
         default: splitMessage[index],
         metadata,
       });
-      finalMessage.push(replacement);
+      return replacement;
     }
   });
 
-  return finalMessage.join(' ');
+  const mappedArray = await Promise.all(mappedPromisses);
+  return mappedArray.join(' ');
 };
 
 bot.on('message', async (channel, user, message, self) => {
@@ -95,7 +93,7 @@ bot.on('message', async (channel, user, message, self) => {
 
   if (!exists) return;
 
-  const parsedMsg = bot.parseMessage({ user, command, regex, message });
+  const parsedMsg = await bot.parseMessage({ user, command, regex, message });
   bot.sendMessage(parsedMsg);
   //   if (commandHASH[message]) {
   //     console.log('existe el value, deberia mandar algo');
