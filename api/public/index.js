@@ -1,12 +1,17 @@
 Vue.use(VueMaterial.default);
 
 const BASE_URL = 'http://localhost:3000/api';
-const NEW_COMMAND_SWAL_FORM = (title) => {
+const NEW_COMMAND_SWAL_FORM = (title, command = null) => {
   return {
     title,
-    html:
-      '<input id="swal-input1" class="swal2-input" placeholder="Comando ej: !chau">' +
-      '<input id="swal-input2" class="swal2-input" placeholder="ej: Hasta la proximaaa">',
+    width: '80%',
+    html: `
+       <input id="swal-input1" class="swal2-input" placeholder="Comando ej: !chau"
+           value="${command ? command.name : ''}">
+       <br/>
+       <input id="swal-input2" class="swal2-input" placeholder="ej: Hasta la proximaaa"
+           value="${command ? command.value : ''}">
+       `,
     preConfirm: function () {
       return new Promise(function (resolve) {
         // Validate input
@@ -31,7 +36,7 @@ new Vue({
   },
   methods: {
     editCommand(command) {
-      Swal.fire(NEW_COMMAND_SWAL_FORM('Editar comando'))
+      Swal.fire(NEW_COMMAND_SWAL_FORM('Editar comando', command))
         .then(async (form) => {
           const { data } = await axios.put(`${BASE_URL}/commands/edit`, {
             oldOne: { name: command.name, value: command.value },

@@ -37,3 +37,7 @@
   display: flex;
   justify-content: center;
 }
+
+.swal2-input{
+    width: 80% !important
+}

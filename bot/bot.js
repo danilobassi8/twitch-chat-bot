@@ -1,5 +1,6 @@
 const db = require('../database/db');
 const config = require('../config');
+const replacements = require('./replacements');
 const tmi = require('tmi.js');
 
 const bot = new tmi.Client(config.tmi);
@@ -35,7 +36,6 @@ bot.updateCommands = function (commands) {
     regex = regex.replace(variableRegex, 'w*');
     commandHASH[command.name] = { value, regex };
   });
-  console.log('UPDATEADO EL REGEX', commandHASH);
 };
 
 bot.checkIfMessageIsValid = (message) => {
@@ -60,33 +60,32 @@ bot.checkIfMessageIsValid = (message) => {
 };
 
 bot.parseMessage = (metadata) => {
-  console.log('//////////// reset //////////////');
-  console.log(metadata);
   const command = commandHASH[metadata.command];
-  console.log('este es el command', command);
 
   let finalMessage = [];
 
   // first, we need to match all variables. Diff btw metadata.command and metadata.message
-  splitCommand = metadata.command.split(' ');
+  splitCommand = command.value.split(' ');
   splitMessage = metadata.message.split(' ');
 
-  const MSG_VARS = {};
+  console.log(']]]]]]]]]]]]]]]]]]]]]]]]');
+  console.log({ splitCommand, splitMessage });
+
   splitCommand.forEach((word, index) => {
     // if not a variable, add the same word as in the msg
     if (!(word.startsWith('$(') && word.endsWith(')'))) {
-      finalMessage.push(splitMessage[index]);
+      finalMessage.push(word);
     } else {
-        // check if the variable is  pre-defined
-        // if predefined, replace it
-        // if not, check is in MSG_VARS
-        //    if in MSG_VARS, replace it
-        //    if not, add the msg value and replace it
-      finalMessage.push('variable');
+      const replacement = replacements({
+        key: word,
+        default: splitMessage[index],
+        metadata,
+      });
+      finalMessage.push(replacement);
     }
   });
 
-  console.log('este es el mensaje final', finalMessage);
+  return finalMessage.join(' ');
 };
 
 bot.on('message', async (channel, user, message, self) => {
@@ -97,14 +96,11 @@ bot.on('message', async (channel, user, message, self) => {
   if (!exists) return;
 
   const parsedMsg = bot.parseMessage({ user, command, regex, message });
-  console.log('UN MENSAJE SIGUE UNA LOGICA,', command, regex);
-
+  bot.sendMessage(parsedMsg);
   //   if (commandHASH[message]) {
   //     console.log('existe el value, deberia mandar algo');
   //     return await bot.sendMessage(commandHASH[message]);
   //   }
-  console.log('/////');
-  console.log(commandHASH[message]);
 });
 
 exports.bot = bot;
